@@ -14,6 +14,7 @@
 - Chống phá: tên qua `containsBanned`, tối đa 500 người, 200 lượt vào/phút/IP (chỉ tin `cf-connecting-ip` khi đến từ 127.0.0.1), mỗi máy 6 lần bấm/2 giây, im 10 phút thì bị rời.
 - Giọng: mặc định chỉ Edge (máy khách không có VieNeu); muốn VieNeu thì đặt biến VIENEU_VOICE.
 - Màn hình ngang: khung QR to bên trái sân thi (`KhungQr.tsx`); màn hình dọc: QR nhỏ góc trên. Chữ trên màn hình không nhắc Zalo (chủ kênh, 2026-11-10).
+- Không có BAT-LIVE.bat (file mở bản TikTok, đã xoá 2026-11-10 để người tải không nhầm). Người host dùng goi/MO-TRUONG-THI.bat trong zip; sửa code thì chạy npm run dev.
 - Đóng gói: `npm run dong-goi` ra `ban-phat-hanh/TrangNguyen-QR.zip` (~65 MB): node.exe (Node 24 LTS, kiểm mã băm), thư viện chạy (không có React/vite vì đã dựng vào dist), cloudflared, `goi/MO-TRUONG-THI.bat` + `goi/HUONG-DAN.txt`. Không cần cài gì; đã thử chạy từ thư mục có dấu & và dấu cách. BAT chặn khi bấm ngay trong zip (đường dẫn có AppData\Local\Temp); server tự mở trình duyệt khi sẵn sàng (MO_TRINH_DUYET=1).
 
 > File này mô tả RIÊNG game này. Luật chung cho mọi game nằm ở `E:\01_Projects\VibeCode\CLAUDE.md`.
