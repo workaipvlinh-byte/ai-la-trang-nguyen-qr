@@ -41,7 +41,7 @@ export function KhungQr({ qr, soSiTu, rong }: { qr: Qr | null; soSiTu: number; r
         </div>
       )}
       <ol className="space-y-[0.6vh] text-left text-[2.4vh] font-semibold">
-        <li>1. Mở camera hoặc Zalo, quét mã</li>
+        <li>1. Mở camera điện thoại, quét mã</li>
         <li>2. Nhập tên, chọn đội</li>
         <li>3. Bấm đáp án ngay trên điện thoại</li>
       </ol>

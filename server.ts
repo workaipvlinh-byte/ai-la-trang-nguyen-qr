@@ -12,6 +12,7 @@ import express from 'express';
 import dotenv from 'dotenv';
 import path from 'path';
 import fs from 'fs';
+import { exec } from 'child_process';
 import { fileURLToPath } from 'url';
 import { TikTokLiveConnection, WebcastEvent, ControlEvent } from 'tiktok-live-connector';
 import { MsEdgeTTS, OUTPUT_FORMAT } from 'msedge-tts';
@@ -536,9 +537,9 @@ async function googleTts(text: string): Promise<Buffer> {
 const ttsCache = new Map<string, Buffer>();
 // Giọng VieNeu (E:\02_AI\VieNeu-TTS chạy server ở cổng 8000, card đồ hoạ tạo giọng).
 // Vừa tạo vừa phát nên gần như không phải chờ. VieNeu chưa bật hoặc lỗi thì tự quay về giọng Edge.
-// Đổi giọng: đặt biến VIENEU_VOICE (vd "Thiện Minh"); để trống = chỉ dùng Edge.
+// Đổi giọng: đặt biến VIENEU_VOICE (vd "Adam bựa"). Bản quét QR mặc định chỉ dùng Edge (máy khách không có VieNeu).
 const VIENEU_URL = process.env.VIENEU_URL || 'http://127.0.0.1:8000';
-const VIENEU_VOICE = process.env.VIENEU_VOICE ?? 'Adam bựa';
+const VIENEU_VOICE = process.env.VIENEU_VOICE ?? '';
 const vieneuCache = new Map<string, Buffer>();
 async function vieneuTts(text: string, res: express.Response): Promise<boolean> {
   const cached = vieneuCache.get(text);
@@ -648,7 +649,9 @@ async function start() {
   if (process.env.KHONG_DUONG_HAM !== '1') moDuongHam({ dir: __dirname, port: CHOI_PORT, doi: (d) => (duongHam = d) });
 
   app.listen(PORT, '127.0.0.1', () => {
-    console.log(`Server chạy ở http://localhost:${PORT}  |  Link LIVE Studio: http://lvh.me:${PORT}/?view=stage`);
+    console.log(`Server chạy ở http://localhost:${PORT}  |  Màn hình lớn: http://localhost:${PORT}/?view=stage`);
+    // gói zip (MO-TRUONG-THI.bat): server sẵn sàng rồi mới mở trình duyệt, không còn cảnh "refused to connect"
+    if (process.env.MO_TRINH_DUYET === '1') exec(`cmd /c start "" "http://localhost:${PORT}/?view=stage"`);
     // lần trước đang kết nối mà server bị tắt / bật lại: tự kết nối lại tài khoản đó
     if (wantUser) {
       console.log(`[TikTok] Tự kết nối lại @${wantUser} (lần trước đang kết nối)`);

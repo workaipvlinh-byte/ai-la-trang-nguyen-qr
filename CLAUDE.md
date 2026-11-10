@@ -1,4 +1,20 @@
-# Ai Là Trạng Nguyên: ghi chú cho Claude
+# Ai Là Trạng Nguyên, BẢN QUÉT MÃ QR: ghi chú cho Claude
+
+> Thư mục này là bản riêng tách từ `../ai-la-trang-nguyen` (bản TikTok LIVE) ngày 2026-11-10, KHÔNG có remote GitHub.
+> Không có TikTok: người chơi quét mã QR, chơi bằng trang web trên điện thoại. Mục "Bản quét QR" ngay dưới là riêng bản này;
+> các mục còn lại chép từ bản TikTok (luật chơi, câu hỏi, giọng ông đồ dùng chung). Sửa luật chung thì cân nhắc sửa cả 2 bản.
+
+## Bản quét QR (2026-11-10)
+
+- Cổng 3017 = màn hình lớn + trang điều khiển (chỉ máy host, 127.0.0.1). Cổng 3018 = trang điện thoại (0.0.0.0), chỉ có `/` và `/api/choi/*` (`choi.ts`). Đường hầm chỉ trỏ vào 3018 nên người lạ không chạm được lệnh điều khiển.
+- Điện thoại bấm A/B/C/D, nút cảm xúc (Khó quá, Dễ ợt, Haha, Hay quá), thả tim (chỉ Thi Đình). Server đổi thành sự kiện "chat"/"like" giả như TikTok nên game chạy y nguyên. KHÔNG có ô gõ chữ tự do. Không có quà.
+- Điện thoại hỏi `/api/choi/trang-thai` mỗi giây (đường hầm Cloudflare bản nhanh KHÔNG hỗ trợ SSE, tối đa 200 yêu cầu cùng lúc). Điểm từng người lấy từ `view().ban`.
+- 3 miền đổi thành 3 đội: Đỏ (bac) / Vàng (trung) / Xanh (nam), chọn lúc vào. Tên đội ở `MIEN` (GameStage), `TEN_MIEN` (useGame).
+- Đường hầm: `duong-ham.ts` chạy `bin/cloudflared.exe` (không đưa vào git), chỉ đưa địa chỉ lên mã QR khi đã tự vào thử được (mấy giây đầu Cloudflare trả lỗi 530); không có hầm thì QR dùng IP Wi-Fi. `KHONG_DUONG_HAM=1` để tắt.
+- Chống phá: tên qua `containsBanned`, tối đa 500 người, 200 lượt vào/phút/IP (chỉ tin `cf-connecting-ip` khi đến từ 127.0.0.1), mỗi máy 6 lần bấm/2 giây, im 10 phút thì bị rời.
+- Giọng: mặc định chỉ Edge (máy khách không có VieNeu); muốn VieNeu thì đặt biến VIENEU_VOICE.
+- Màn hình ngang: khung QR to bên trái sân thi (`KhungQr.tsx`); màn hình dọc: QR nhỏ góc trên. Chữ trên màn hình không nhắc Zalo (chủ kênh, 2026-11-10).
+- Đóng gói: `npm run dong-goi` ra `ban-phat-hanh/TrangNguyen-QR.zip` (~65 MB): node.exe (Node 24 LTS, kiểm mã băm), thư viện chạy (không có React/vite vì đã dựng vào dist), cloudflared, `goi/MO-TRUONG-THI.bat` + `goi/HUONG-DAN.txt`. Không cần cài gì; đã thử chạy từ thư mục có dấu & và dấu cách. BAT chặn khi bấm ngay trong zip (đường dẫn có AppData\Local\Temp); server tự mở trình duyệt khi sẵn sàng (MO_TRINH_DUYET=1).
 
 > File này mô tả RIÊNG game này. Luật chung cho mọi game nằm ở `E:\01_Projects\VibeCode\CLAUDE.md`.
 > Khi chủ kênh chốt một quyết định (câu đọc, màu, luật chơi), ghi vào mục "Quyết định của chủ kênh".
@@ -38,7 +54,7 @@ Game show trắc nghiệm cho TikTok LIVE theo không khí khoa cử xưa. Ông 
 - Ông đồ MC: ảnh gốc `public/assets/MC/` (nền trắng), tách nền bằng `node tools/tach-nen.mjs` ra `public/assets/nv/mc/` (mung, suy-nghi, chi, cuoi, tiec).
 - Ảnh nền gốc `ai-la-trang-nguyen.png` (1536x2752, đã xoá logo sao Gemini góc phải dưới khi xuất `nen.jpg`).
 - Giọng đọc: VieNeu-TTS giọng "Adam bựa" (E:_AIVieNeu-TTS, server cổng 8000, BAT-LIVE tự mở cửa sổ "Giọng VieNeu"). VieNeu tắt hoặc lỗi thì tự dùng giọng Edge NamMinh. Đổi giọng: biến VIENEU_VOICE; để trống = chỉ Edge.
-- Cổng **3007** (BAT-LIVE.bat). Link LIVE Studio: http://lvh.me:3007/?view=stage. Thử trong khung preview của Claude: cổng 3507, mở `?view=stage&mute=1` (không phát tiếng).
+- Bản này: cổng 3017 (màn hình lớn `http://localhost:3017/?view=stage`) và 3018 (điện thoại). Thử trong khung preview của Claude: thêm `&mute=1` (không phát tiếng).
 
 ## Quyết định của chủ kênh
 

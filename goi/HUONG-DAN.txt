@@ -1,0 +1,26 @@
+﻿AI LÀ TRẠNG NGUYÊN, BẢN QUÉT MÃ QR
+
+Game đố vui lấy cảm hứng từ khoa cử ngày xưa. Một máy tính mở trường thi, mọi người quét mã bằng điện thoại để vào chơi cùng, ở gần hay ở xa đều được.
+
+CÁCH MỞ
+1. Giải nén cả file zip ra một thư mục có đường dẫn ngắn, ví dụ C:\TrangNguyen. Đừng để trong Desktop, Downloads hay Documents.
+2. Mở thư mục đó, bấm đúp MO-TRUONG-THI.bat.
+3. Windows hiện bảng xanh "Windows protected your PC" thì bấm More info, rồi bấm Run anyway.
+4. Windows hỏi có cho Node.js dùng mạng không thì tick cả hai ô rồi bấm Allow access. Không cho phép thì điện thoại dùng chung Wi-Fi sẽ không vào được.
+5. Khoảng 10 đến 20 giây sau, trình duyệt tự mở màn hình trường thi, mã QR nằm bên trái. Bấm vào màn hình một lần để bật tiếng.
+6. Để cửa sổ đen mở suốt buổi chơi. Đóng nó là tắt game.
+
+NGƯỜI CHƠI LÀM GÌ
+1. Mở camera điện thoại, quét mã QR trên màn hình.
+2. Nhập tên, chọn đội Đỏ, Vàng hoặc Xanh.
+3. Ông đồ đọc xong đề thì bấm đáp án trên điện thoại. Đúng càng nhanh điểm càng cao, sai bị trừ.
+Ai không quét được mã thì gõ địa chỉ in dưới mã QR vào trình duyệt.
+
+MÀN HÌNH LỚN
+Cắm máy vào TV hoặc máy chiếu, bấm F11 cho trình duyệt hiện toàn màn hình. Muốn bắt đầu ván mới, bỏ câu hay đổi tên game thì bấm dòng "Mở trang điều khiển" dưới mã QR. Chỉ máy này vào được trang đó.
+
+KHI CÓ LỖI
+- Dưới mã QR báo "Chỉ điện thoại dùng chung Wi-Fi...": máy chưa mở được đường vào từ xa, thường do mất mạng. Người dùng chung Wi-Fi vẫn chơi được. Có mạng lại thì tắt game rồi mở lại.
+- Điện thoại dùng chung Wi-Fi mà vẫn không vào được: Wi-Fi trường học, quán cà phê hay chặn các máy nói chuyện với nhau. Cho máy tính dùng mạng có internet là mã QR sẽ đi đường vào từ xa.
+- Cửa sổ đen có chữ EADDRINUSE: game đang mở ở một cửa sổ khác. Đóng cửa sổ đó rồi bấm lại.
+- Đường vào từ xa dùng bản miễn phí của Cloudflare, không cam kết lúc nào cũng chạy. Mỗi lần mở game, địa chỉ và mã QR lại đổi mới.

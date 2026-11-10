@@ -268,8 +268,8 @@
     const hoi = async () => {
       try {
         const r = await fetch('/api/choi/trang-thai?id=' + encodeURIComponent(toi.id || ''), { cache: 'no-store' });
-        last = await r.json();
-        ve(last);
+        if (r.status === 401) await vao(true); // máy host bật lại hoặc mình im quá lâu: vào lại bằng tên cũ
+        else { last = await r.json(); ve(last); }
       } catch {
         $('nho').textContent = 'Mất kết nối, đang thử lại…';
       }

@@ -22,8 +22,9 @@ const GIOI = { trai: 'trai', gai: 'gái' } as const;
 // nút cảm xúc -> câu bình luận mà ông đồ nhận ra (src/game/treu.ts). Không có ô gõ chữ tự do.
 const CAM_XUC: Record<string, string> = { kho: 'khó quá', de: 'dễ quá', haha: 'haha', chao: 'chào ông đồ', hay: 'hay quá' };
 const TOI_DA_NGUOI = 500;
+const IM_LANG_MS = 10 * 60_000; // điện thoại im 10 phút (đóng trang, tắt máy) thì rời trường thi, nhả chỗ
 
-type Nguoi = { ten: string; luot: number[] };
+type Nguoi = { ten: string; luot: number[]; thayLuc: number };
 
 export function moCongChoi(o: {
   port: number;
@@ -38,7 +39,20 @@ export function moCongChoi(o: {
   const nguoi = new Map<string, Nguoi>();
   const vaoTheoIp = new Map<string, number[]>();
 
-  const ipCua = (req: express.Request) => String(req.headers['cf-connecting-ip'] || req.socket.remoteAddress || '');
+  // Đường hầm chạy ngay trên máy này nên yêu cầu qua hầm đến từ 127.0.0.1 kèm IP thật ở cf-connecting-ip.
+  // Chỉ tin header đó khi đến từ máy này; máy cùng Wi-Fi gửi thẳng thì dùng IP thật của nó (không giả được).
+  const laMayNay = (ip: string) => ip === '127.0.0.1' || ip === '::1' || ip === '::ffff:127.0.0.1';
+  const ipCua = (req: express.Request) => {
+    const goc = req.socket.remoteAddress || '';
+    const cf = req.headers['cf-connecting-ip'];
+    return laMayNay(goc) && typeof cf === 'string' && cf ? cf : goc;
+  };
+  // dọn người im quá lâu và bộ đếm IP cũ, để kẻ phá không giữ chỗ mãi
+  setInterval(() => {
+    const now = Date.now();
+    for (const [id, n] of nguoi) if (now - n.thayLuc > IM_LANG_MS) nguoi.delete(id);
+    for (const [ip, ds] of vaoTheoIp) if (!ds.length || now - ds[ds.length - 1] > 60_000) vaoTheoIp.delete(ip);
+  }, 60_000).unref();
   // giới hạn số lần trong 1 khoảng: giữ mốc thời gian gần đây, quá thì từ chối
   const conLuot = (ds: number[], toiDa: number, msKhoang: number, now: number) => {
     while (ds.length && now - ds[0] > msKhoang) ds.shift();
@@ -68,8 +82,9 @@ export function moCongChoi(o: {
       if (nguoi.size >= TOI_DA_NGUOI) return res.status(503).json({ loi: 'Trường thi đã đủ chỗ' });
       id = 'p_' + crypto.randomBytes(6).toString('hex');
     }
-    const n: Nguoi = cu ?? { ten, luot: [] };
+    const n: Nguoi = cu ?? { ten, luot: [], thayLuc: now };
     n.ten = ten;
+    n.thayLuc = now;
     nguoi.set(id, n);
     // báo game: người này có mặt (đám trẻ con chạy mang tên họ), chọn đội, chọn nhân vật nam / nữ
     const phe = PHE[req.body?.phe as keyof typeof PHE];
@@ -84,7 +99,8 @@ export function moCongChoi(o: {
     const now = Date.now();
     const id = String(req.body?.id || '');
     const n = nguoi.get(id);
-    if (!n) return res.status(401).json({ loi: 'vao-lai' }); // server vừa bật lại: điện thoại tự vào lại bằng tên cũ
+    if (!n) return res.status(401).json({ loi: 'vao-lai' }); // server vừa bật lại / im quá lâu: điện thoại tự vào lại bằng tên cũ
+    n.thayLuc = now;
     if (!conLuot(n.luot, 6, 2000, now)) return res.status(429).json({ loi: 'Bấm chậm thôi' });
     const loai = String(req.body?.loai || '');
     if (/^[ABCD]$/.test(loai)) binhLuan(id, n, loai);
@@ -101,6 +117,9 @@ export function moCongChoi(o: {
     res.setHeader('Cache-Control', 'no-store');
     if (!v?.phase) return res.json({ phase: 'chua-mo' });
     const id = String(req.query.id || '');
+    const n = nguoi.get(id);
+    if (n) n.thayLuc = Date.now();
+    else if (id) return res.status(401).json({ loi: 'vao-lai' });
     const ban = v.ban?.[id] as [number, number, number, number] | undefined;
     res.json({
       tieuDe: o.caiDat().tieuDe,
