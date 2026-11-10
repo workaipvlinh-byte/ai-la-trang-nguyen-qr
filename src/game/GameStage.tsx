@@ -286,8 +286,8 @@ function BangDen({ v }: { v: View }) {
       <div className="absolute flex flex-col items-center justify-center text-center" style={{ ...full, ...phan }}>
         <div className="text-[48px] font-extrabold" style={{ color: '#ffe27a' }}>Ván mới sau {v.con} giây</div>
         <div className="mt-4 space-y-1 text-[29px] font-semibold leading-snug">
-          <div>4 kỳ thi · 20 câu · gõ A, B, C, D</div>
-          <div>Gõ Bắc, Trung, Nam để thi đua 3 miền</div>
+          <div>4 kỳ thi · 20 câu · bấm trên điện thoại</div>
+          <div>Quét mã QR, chọn đội Đỏ, Vàng hoặc Xanh</div>
           <div>Đúng càng nhanh điểm càng cao, sai bị trừ</div>
         </div>
       </div>
@@ -376,7 +376,7 @@ function DongNhac({ v }: { v: View }) {
     ? kq.soDung > 0 ? `✅ ${kq.soDung} người đúng · nhanh nhất ${kq.nhanh[0].name} ${(kq.nhanh[0].ms / 1000).toFixed(2).replace('.', ',')}s` : '😮 Chưa ai đúng câu này'
     : v.phase === 'hoi'
     ? `📜 ${v.recent.length ? `${v.recent.slice(0, 3).join(', ')} vừa nộp · ` : ''}${v.soNop} sĩ tử đã nộp`
-    : 'Gõ A, B, C, D trả lời · Bắc, Trung, Nam chọn phe';
+    : '📱 Quét mã QR bên cạnh để vào thi';
   return (
     <div className="absolute flex items-center justify-center" style={{ left: 432, top: 868, width: 430, height: 46, zIndex: 1700 }}>
       <div className="max-w-full truncate rounded-full border-2 px-4 text-[21px] font-bold leading-[40px]" style={{ background: PANEL, borderColor: GOLD }}>{noi}</div>
@@ -422,9 +422,10 @@ function PhaoGiay() {
 const crown = (h: number) => (h === 1 ? '👑' : h === 2 ? '🥈' : h === 3 ? '🥉' : `${h}.`);
 
 const MIEN = {
-  bac: { chu: 'B', ten: 'Bắc', mau: '#e53935' },
-  trung: { chu: 'T', ten: 'Trung', mau: '#e0a019' },
-  nam: { chu: 'N', ten: 'Nam', mau: '#2e9e4f' },
+  // bản quét QR: 3 phe là 3 đội màu (người chơi chọn trên điện thoại)
+  bac: { chu: 'Đ', ten: 'Đỏ', mau: '#e53935' },
+  trung: { chu: 'V', ten: 'Vàng', mau: '#e0a019' },
+  nam: { chu: 'X', ten: 'Xanh', mau: '#2e9e4f' },
 } as const;
 
 /** Dấu cạnh tên: 🏆 đầu bảng tuần · 🎓 Trạng Nguyên ván trước · 🔥N đúng liền · chấm màu phe miền */
@@ -510,7 +511,7 @@ function BangNho({ v }: { v: View }) {
       </div>
       {top.length === 0 ? (
         <div className="mt-6 text-center text-[26px] font-semibold opacity-75">
-          {v.soSiTu ? 'Chưa ai có điểm. Trả lời đúng để lên bảng!' : 'Chưa ai ghi danh. Gõ đáp án để vào sân thi!'}
+          {v.soSiTu ? 'Chưa ai có điểm. Trả lời đúng để lên bảng!' : 'Chưa ai ghi danh. Quét mã QR để vào sân thi!'}
         </div>
       ) : (
         <div className="grid grid-cols-2 gap-x-8">

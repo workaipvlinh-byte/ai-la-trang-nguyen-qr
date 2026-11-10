@@ -536,6 +536,10 @@ export class KyThi {
       ghe: this.bxh(GAME.soGhe, true),
       treCon: this.treCon(this.bxh(GAME.soGhe, true)),
       top: this.bxh(this.phase === 'bangVang' || this.phase === 'vinhQuy' ? 20 : 10),
+      // bản quét QR: điểm của từng người cho điện thoại [điểm, hạng, điểm câu vừa rồi, đáp án đã chọn câu này hoặc -1]
+      ban: Object.fromEntries(
+        this.bxh(this.siTu.size, true).map((h) => [h.id, [h.diem, h.hang, h.gain, this.answers.get(h.id)?.chon ?? -1]]),
+      ) as Record<string, [number, number, number, number]>,
     };
   }
 }

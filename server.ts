@@ -15,12 +15,17 @@ import fs from 'fs';
 import { fileURLToPath } from 'url';
 import { TikTokLiveConnection, WebcastEvent, ControlEvent } from 'tiktok-live-connector';
 import { MsEdgeTTS, OUTPUT_FORMAT } from 'msedge-tts';
+import QRCode from 'qrcode';
+import { moCongChoi, ipWifi } from './choi';
+import { moDuongHam, type DuongHam } from './duong-ham';
 
 dotenv.config();
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app = express();
-const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 3007;
+// bản quét QR: 3017 = trang host (chỉ máy này), 3018 = trang chơi cho điện thoại. Khác cổng bản TikTok (3007) để chạy chung máy được.
+const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 3017;
+const CHOI_PORT = process.env.CHOI_PORT ? parseInt(process.env.CHOI_PORT, 10) : 3018;
 
 // Giọng đọc. Đổi ở đây nếu game cần giọng khác (vi-VN-HoaiMyNeural = nữ)
 const TTS_VOICE = process.env.TTS_VOICE || 'vi-VN-NamMinhNeural';
@@ -396,8 +401,10 @@ app.post('/api/cai-dat', (req, res) => {
 });
 
 // Trang stage chạy game, gửi ảnh chụp lên đây; trang điều khiển vẽ lại ảnh chụp đó (xem trước luôn khớp live)
+let trangThaiMoi: any = null; // ảnh chụp mới nhất, điện thoại hỏi qua cổng 3018
 app.post('/api/game/state', (req, res) => {
-  broadcast('gamestate', req.body || {});
+  trangThaiMoi = req.body || {};
+  broadcast('gamestate', trangThaiMoi);
   res.json({ success: true });
 });
 
@@ -606,6 +613,16 @@ app.get('/api/tts', async (req, res) => {
 
 // ---------- API riêng của game: thêm bên dưới ----------
 
+// ---------- Bản quét QR: cổng điện thoại + đường hầm + mã QR cho trang host ----------
+let duongHam: DuongHam = { trang: 'tat', url: '', loi: '' };
+// Trang host hỏi: địa chỉ cho người chơi + mã QR. Có đường hầm thì dùng địa chỉ công khai, không thì địa chỉ Wi-Fi.
+app.get('/api/qr', async (_req, res) => {
+  const lan = ipWifi().map((ip) => `http://${ip}:${CHOI_PORT}`);
+  const url = duongHam.url || lan[0] || '';
+  const svg = url ? await QRCode.toString(url, { type: 'svg', margin: 1, errorCorrectionLevel: 'M' }) : '';
+  res.json({ url, svg, chiWifi: !duongHam.url, duongHam });
+});
+
 // ---------- Khởi động ----------
 async function start() {
   if (process.env.NODE_ENV !== 'production') {
@@ -627,6 +644,9 @@ async function start() {
   }
 
   // Chỉ nghe trên máy này: API không có đăng nhập, người cùng Wi-Fi không được điều khiển giọng đọc
+  moCongChoi({ port: CHOI_PORT, broadcast, trangThai: () => trangThaiMoi, caiDat, dir: __dirname });
+  if (process.env.KHONG_DUONG_HAM !== '1') moDuongHam({ dir: __dirname, port: CHOI_PORT, doi: (d) => (duongHam = d) });
+
   app.listen(PORT, '127.0.0.1', () => {
     console.log(`Server chạy ở http://localhost:${PORT}  |  Link LIVE Studio: http://lvh.me:${PORT}/?view=stage`);
     // lần trước đang kết nối mà server bị tắt / bật lại: tự kết nối lại tài khoản đó

@@ -68,13 +68,13 @@ export const GAME = {
   // Mỗi nhóm nhiều câu, bốc ngẫu nhiên cho đỡ lặp.
   loi: {
     cho: [
-      '[hắng giọng] Trường thi sắp mở cửa! Sĩ tử nào muốn đỗ Trạng thì mài mực sẵn đi, gõ A, B, C hoặc D vào bình luận.',
+      '[hắng giọng] Trường thi sắp mở cửa! Sĩ tử nào muốn đỗ Trạng thì mài mực sẵn đi, quét mã rồi bấm đáp án trên điện thoại.',
       'Ván mới sắp bắt đầu rồi đây. Đúng càng nhanh điểm càng cao, mà sai là ông trừ điểm đấy nhé. [cười]',
-      'Ai vừa vào thì nghe ông dặn này: gõ A, B, C hoặc D là thành sĩ tử luôn, không cần nộp hồ sơ. [cười]',
+      'Ai vừa đến thì nghe ông dặn này: quét mã trên màn hình, nhập tên là thành sĩ tử luôn, không cần nộp hồ sơ. [cười]',
     ],
     vong: [
       [
-        '[hắng giọng] Khảo hạch trường làng bắt đầu! Năm câu dễ thôi, mười giây một câu, gõ A, B, C hoặc D nhé.',
+        '[hắng giọng] Khảo hạch trường làng bắt đầu! Năm câu dễ thôi, mười giây một câu, bấm A, B, C hoặc D nhé.',
         'Vào khảo hạch trường làng nào. Câu dễ như ăn kẹo, ai sai thì về nhà ôn lại đi. [cười]',
       ],
       [
@@ -82,7 +82,7 @@ export const GAME = {
         '[hắng giọng] Thi Hương bắt đầu! Từ đây là bắt đầu phân loại sĩ tử rồi đấy.',
       ],
       [
-        'Vào thi Hội! Sai một câu là mất ba trăm điểm như chơi, nghĩ kỹ rồi hãy gõ.',
+        'Vào thi Hội! Sai một câu là mất ba trăm điểm như chơi, nghĩ kỹ rồi hãy bấm.',
         '[hắng giọng] Thi Hội đây. Câu bắt đầu khó, đừng có đoán bừa mà mất điểm oan nhé.',
       ],
       [
@@ -95,7 +95,7 @@ export const GAME = {
     // giục giữa giờ
     nhac: [
       'Nhanh tay lên các sĩ tử!',
-      'Ai chưa nộp bài thì gõ đi nào!',
+      'Ai chưa nộp bài thì bấm đi nào!',
       'Thời gian không chờ đợi ai đâu nhé!',
       '[cười] Nghĩ kỹ chưa đấy?',
       'Cố lên các sĩ tử, sai thì câu sau gỡ lại!',
@@ -123,8 +123,8 @@ export const GAME = {
     ],
     // phe miền đang thua điểm
     mienKem: [
-      (m: string, goi: string) => `Phe ${m} đang bị bỏ lại phía sau, cố lên nào! Ai chưa chọn phe thì gõ ${goi}.`,
-      (m: string, goi: string) => `Bà con ${m} đâu cả rồi? Gõ ${goi} vào phe, kéo điểm lên đi!`,
+      (m: string, goi: string) => `${m} đang bị bỏ lại phía sau, cố lên nào!`,
+      (m: string, goi: string) => `Các bạn ${m} đâu cả rồi? Kéo điểm lên đi chứ!`,
       (m: string) => `[cười] ${m} ơi, điểm thấp nhất trường rồi đấy. Gỡ lại đi chứ!`,
     ],
     // cổ vũ người xếp sau, đọc thêm ở bảng vàng
@@ -183,7 +183,7 @@ export const GAME = {
       '[cười] Cả trường thả tim đủ rồi! Ông bỏ giúp hai đáp án sai nhé.',
       'Tim đầy rồi! Ông đồ ra tay, loại bớt hai đáp án sai cho cả phòng.',
     ],
-    mienThang: (mien: string, diem: number) => `Phe ${mien} thắng ván này với ${diem} điểm! Ai chưa chọn phe thì gõ Bắc, Trung hoặc Nam nhé.`,
+    mienThang: (mien: string, diem: number) => `${mien} thắng ván này với ${diem} điểm! Ván sau đội nào gỡ lại đây?`,
     // Trêu / đáp bình luận vào khoảng lặng (KHÔNG đọc nguyên văn bình luận). vong = tên kỳ thi đang thi
     treu: {
       kho: [
@@ -195,7 +195,7 @@ export const GAME = {
         (n: string) => `Dễ thì ${n} trả lời nhanh lên cho ông xem nào!`,
       ],
       chao: [
-        (n: string) => `Chào ${n}! Vào thi luôn đi, gõ A, B, C hoặc D là được.`,
+        (n: string) => `Chào ${n}! Ngồi vào chỗ đi, sắp có câu hỏi rồi.`,
         (n: string) => `À ${n} đến rồi. Mài mực đi, sắp có câu hỏi đấy.`,
       ],
       goiY: [
@@ -211,7 +211,7 @@ export const GAME = {
         (n: string) => `${n} khen thế thì ông phải ra câu hay hơn mới được.`,
       ],
       sai: [
-        (n: string) => `[thở dài] ${n} sai ba câu liền rồi. Bình tĩnh, đọc kỹ đề rồi hãy gõ nhé.`,
+        (n: string) => `[thở dài] ${n} sai ba câu liền rồi. Bình tĩnh, đọc kỹ đề rồi hãy bấm nhé.`,
         (n: string) => `${n} ơi, ba câu liền chưa trúng câu nào. [cười] Câu sau phải gỡ lại đấy!`,
       ],
     },

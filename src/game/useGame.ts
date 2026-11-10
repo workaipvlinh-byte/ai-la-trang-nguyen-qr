@@ -16,8 +16,8 @@ const bankFiles = import.meta.glob<string>('./cau-hoi/*.txt', { query: '?raw', i
 const BANK = Object.values(bankFiles).flatMap((t) => parseMc(t));
 
 const pick = makePicker();
-export const TEN_MIEN = { bac: 'miền Bắc', trung: 'miền Trung', nam: 'miền Nam' } as const;
-const GOI_MIEN = { bac: 'Bắc', trung: 'Trung', nam: 'Nam' } as const;
+export const TEN_MIEN = { bac: 'đội Đỏ', trung: 'đội Vàng', nam: 'đội Xanh' } as const;
+const GOI_MIEN = { bac: 'Đỏ', trung: 'Vàng', nam: 'Xanh' } as const;
 const post = (url: string, body: unknown) =>
   fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) }).catch(() => {});
 

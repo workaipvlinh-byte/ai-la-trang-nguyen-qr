@@ -6,3 +6,4 @@ dist/
 .claude/settings.local.json
 settings.json
 data/
+bin/*.exe
