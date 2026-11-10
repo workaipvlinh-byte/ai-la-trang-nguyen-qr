@@ -1,6 +1,6 @@
 # Ai Là Trạng Nguyên, BẢN QUÉT MÃ QR: ghi chú cho Claude
 
-> Thư mục này là bản riêng tách từ `../ai-la-trang-nguyen` (bản TikTok LIVE) ngày 2026-11-10, KHÔNG có remote GitHub.
+> Thư mục này là bản riêng tách từ `../ai-la-trang-nguyen` (bản TikTok LIVE) ngày 2026-11-10. Repo GitHub CÔNG KHAI: https://github.com/workaipvlinh-byte/ai-la-trang-nguyen-qr (zip ở Releases, tag v1.0.0). Chỉ push khi chủ kênh bảo; ra bản zip mới thì npm run dong-goi rồi tạo release mới.
 > Không có TikTok: người chơi quét mã QR, chơi bằng trang web trên điện thoại. Mục "Bản quét QR" ngay dưới là riêng bản này;
 > các mục còn lại chép từ bản TikTok (luật chơi, câu hỏi, giọng ông đồ dùng chung). Sửa luật chung thì cân nhắc sửa cả 2 bản.
 
